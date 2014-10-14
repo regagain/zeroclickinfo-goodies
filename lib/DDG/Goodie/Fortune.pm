@@ -14,8 +14,8 @@ category 'random';
 topics 'words_and_games';
 attribution github => ['https://github.com/frncscgmz', 'frncscgmz'];
 
-zci is_cached => 0;
 zci answer_type => "fortune";
+zci is_cached   => 0;
 
 my $ffile = share('fortunes');
 my $fortune_file = Fortune->new($ffile);
@@ -23,8 +23,14 @@ $fortune_file->read_header();
 
 handle remainder => sub {
     my $output = $fortune_file->get_random_fortune();
-    $output =~ s/\n//g;
-    return $output;
+    $output =~ s/\n/ /g;
+
+    return $output,
+      structured_answer => {
+        input     => [],
+        operation => 'random fortune',
+        result    => $output
+      };
 };
 
 1;
